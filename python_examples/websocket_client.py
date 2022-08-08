@@ -1,7 +1,5 @@
 import websocket
-import _thread
 import time
-import rel
 import json
 
 
@@ -20,17 +18,6 @@ def on_close(ws, close_status_code, close_msg):
 
 def on_open(ws):
     print("### Connection established ###")
-
-
-if __name__ == "__main__":
-    ws = websocket.WebSocketApp("ws://localhost:3000/ws",
-                                on_open=on_open,
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close)
-
-    ws.run_forever(dispatcher=rel)  # Set dispatcher to automatic reconnection
-    rel.signal(2, rel.abort)  # Keyboard Interrupt
 
     print("RequestGetAll")
     ws.send("\"RequestGetAll\"")
@@ -61,4 +48,12 @@ if __name__ == "__main__":
     }
     ws.send(json.dumps(ws_req))
 
-    rel.dispatch()
+
+if __name__ == "__main__":
+    ws = websocket.WebSocketApp("ws://localhost:3000/ws",
+                                on_open=on_open,
+                                on_message=on_message,
+                                on_error=on_error,
+                                on_close=on_close)
+
+    ws.run_forever()
